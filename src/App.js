@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import Contact from './components/contacts/Contact';
+import AddContact from './components/contacts/AddContact';
+import Header from './components/layout/Header';
 import './App.css';
+//import 'materialize-css/dist/css/materialize.min.css';
+//import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {
   render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+    return(
+      <div className='App'>
+        <Header branding="Contact List"/>
+        <AddContact />
+        <Contact name='Joey Tornado'/>
+        <Contact name='Alexander Cumulous'/>
+        <Contact name='Heather Stratos'/>
+        <Contact name='Alan Ayala'/>
+        <Contact name='Sean Boddy'/>
+        <Contact name='Gwen Follett'/>
+        <Contact name='Kevin Cromwell'/>
       </div>
-    );
+    )
   }
 }
 
