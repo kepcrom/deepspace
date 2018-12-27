@@ -4,10 +4,10 @@ import Face from './Face';
 
 class Contacts extends React.Component {
   constructor(props) {
-    super();
+    super(props);
   }
   render () {
-    const { name, email, phone } = this.props;
+    const { name, email, phone } = this.props.contact;
     return(
       <div>
         <div className='face'>

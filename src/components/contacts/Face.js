@@ -59,19 +59,29 @@ class Face extends React.Component {
     console.log(this.state.squares);
   }
 
+  componentDidMount() {
+    const { squares, color } = this.state;
+    const ctx = this.refs.face.getContext('2d');
+    ctx.fillStyle = '#' + color;
+    let count = 0;
+    for ( let n = 0; n < 6; n++ ) {
+      for ( let i = 0; i < 6; i++ ) {
+        if( squares[count++] === 1 ){
+          ctx.fillRect((i * 10),(n * 10),10,10);
+        }
+      }
+    }
+  }
+
   render() {
     const { squares, color } = this.state;
-    let blocks = [];
-    squares.map((x,i) => {
-      blocks.push(<FaceBrick id={i} color={color} on={x} />)
-    })
     let tint = '#' + color;
     return(
       <div>
         <div className='facebox' style={{ spacing:'0px', overflow:'hidden', padding:'5px', borderWidth:'4px', borderStyle:'solid', borderColor:tint, display:'inline-block', borderRadius:'10px 10px 0px 0px'  }}>
-          <div className='face' style={{ cellSpacing:'0px', overflow:'hidden', width:'60px', height:'60px', borderWidth:'4px', borderStyle:'solid', borderColor:tint }}>
-            {blocks}
-          </div>
+
+            <canvas ref='face' width='60' height='60' />
+
         </div>
       </div>
     )
