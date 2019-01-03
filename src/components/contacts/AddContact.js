@@ -1,6 +1,15 @@
 import React from 'react';
 import { Consumer } from '../../context';
 import uuid from 'uuid';
+import axios from 'axios';
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Input from '@material-ui/core/Input';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
 
 class AddContact extends React.Component {
   state = {
@@ -11,7 +20,7 @@ class AddContact extends React.Component {
   };
 
   onChange = (e) => this.setState({ [e.target.name] : e.target.value });
-  onSubmit = (dispatch, e) => {
+  onSubmit = async (dispatch, e) => {
     e.preventDefault();
     const { name, email, phone } = this.state;
 
@@ -38,7 +47,9 @@ class AddContact extends React.Component {
       phone
     }
 
-    dispatch({ type: 'ADD_CONTACT', payload: newContact });
+    const res = await axios.post('http://localhost:8000/api:astronaut/',newContact);
+    dispatch({ type: 'ADD_CONTACT', payload: res.data });
+
     this.setState({
       name: '',
       email: '',
@@ -57,25 +68,20 @@ class AddContact extends React.Component {
         {value => {
           const { dispatch } = value;
           return (
-            <div style={{ margin:'10px' }}>
-              <h1>Add Contact</h1>
-              <form onSubmit={this.onSubmit.bind(this, dispatch)}>
-                <hr />
-                <div style={{ margin:'5px' }}>
-                  <label htmlFor="name">Name
-                  <input type="text" name="name" value={name} onChange={this.onChange} /></label>
-                </div>
-                <div style={{ margin:'5px' }}>
-                  <label htmlFor="email">Email
-                  <input type="text" name="email" value={email} onChange={this.onChange} /></label>
-                </div>
-                <div style={{ margin:'5px' }}>
-                  <label htmlFor="phone">Phone
-                  <input type="text" name="phone" value={phone} onChange={this.onChange} /></label>
-                </div>
-                <input type='submit' />
-                <hr />
-              </form>
+            <div>
+              <Typography variant="subheading" style={{margin:'1em'}}>Add Contact</Typography>
+              <Card>
+                <form onSubmit={this.onSubmit.bind(this, dispatch)}>
+                  <CardContent>
+                    <TextField name="name"  label="Name"  value={name}  onChange={this.onChange} fullWidth='1' required='1' />
+                    <TextField name="email" label="Email" value={email} onChange={this.onChange} fullWidth='1' required='1' />
+                    <TextField name="phone" label="Phone" value={phone} onChange={this.onChange} fullWidth='1' required='1' />
+                    <Toolbar>
+                      <Input type="submit" disableUnderline="1" style={{marginLeft:'auto'}}/>
+                    </Toolbar>
+                  </CardContent>
+                </form>
+              </Card>
             </div>
           )
         }}

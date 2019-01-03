@@ -1,53 +1,104 @@
 import React from 'react';
+import { Consumer } from '../../context';
+import uuid from 'uuid';
+import axios from 'axios';
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Input from '@material-ui/core/Input';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
 
 class EditContact extends React.Component {
-  constructor(props) {
-    super(props);
+  state = {
+    name :'',
+    email : '',
+    phone : '',
+    errors : {}
+  };
 
-    this.nameInput = React.createRef();
-    this.emailInput = React.createRef();
-    this.phoneInput = React.createRef();
+  async componentDidMount() {
+    const { id } = this.props.match.params;
+    const res = await axios.get(`http://localhost:8000/api:astronaut/${id}/`);
+    this.setState({
+      name: res.data.name,
+      email: res.data.email,
+      phone: res.data.phone
+    });
   }
-  onSubmit = (e) => {
+
+  onChange = (e) => this.setState({ [e.target.name] : e.target.value });
+  onSubmit = async (dispatch, e) => {
     e.preventDefault();
-    const contact = {
-      name: this.nameInput.current.value,
-      email: this.emailInput.current.value,
-      phone: this.phoneInput.current.value
-    }
-  }
+    const { name, email, phone } = this.state;
 
-  static defaultProps = {
-    name: 'Fred Smith',
-    email: 'fred@yahoo.com',
-    phone: '777-777-7777'
+    if( name === '' )
+    {
+      this.setState({ errors: { name: 'Name is Required' }});
+      return;
+    }
+    if( email === '' )
+    {
+      this.setState({ errors: { email: 'Email is Required' }});
+      return;
+    }
+    if( phone === '' )
+    {
+      this.setState({ errors: { phone: 'Phone is Required' }});
+      return;
+    }
+
+    const newContact = {
+      name,
+      email,
+      phone
+    }
+
+    const { id } = this.props.match.params;
+
+    const res = await axios.put(`http://localhost:8000/api:astronaut/${id}/`,newContact);
+    dispatch({ type: 'UPDATE_CONTACT', payload: res.data });
+
+    this.setState({
+      name: '',
+      email: '',
+      phone: '',
+      errors: {}
+    });
+
+    this.props.history.push('/');
   }
 
   render() {
-    const {name, email, phone} = this.props;
+    const {name, email, phone} = this.state;
+
     return (
-      <div style={{ margin:'10px' }}>
-        <h1>Add Contact</h1>
-        <form onSubmit={this.onSubmit}>
-          <hr />
-          <div style={{ margin:'5px' }}>
-            <label htmlFor="name">Name
-            <input type="text" name="name" defaultValue={name} ref={this.nameInput}/></label>
-          </div>
-          <div style={{ margin:'5px' }}>
-            <label htmlFor="email">Email
-            <input type="text" name="email" defaultValue={email} ref={this.emailInput}/></label>
-          </div>
-          <div style={{ margin:'5px' }}>
-            <label htmlFor="phone">Phone
-            <input type="text" name="phone" defaultValue={phone} ref={this.phoneInput}/></label>
-          </div>
-          <input type='submit' />
-          <hr />
-        </form>
-      </div>
+      <Consumer>
+        {value => {
+          const { dispatch } = value;
+          return (
+            <div>
+              <Typography variant="subheading" style={{margin:'1em'}}>Edit Contact</Typography>
+              <Card>
+                <form onSubmit={this.onSubmit.bind(this, dispatch)}>
+                  <CardContent>
+                    <TextField name="name"  label="Name"  value={name}  onChange={this.onChange} fullWidth='1' required='1' />
+                    <TextField name="email" label="Email" value={email} onChange={this.onChange} fullWidth='1' required='1' />
+                    <TextField name="phone" label="Phone" value={phone} onChange={this.onChange} fullWidth='1' required='1' />
+                    <Toolbar>
+                      <Input type="submit" disableUnderline="1" style={{marginLeft:'auto'}}/>
+                    </Toolbar>
+                  </CardContent>
+                </form>
+              </Card>
+            </div>
+          )
+        }}
+      </Consumer>
     )
   }
 }
 
-export default AddContact;
+export default EditContact;

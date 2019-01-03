@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 const Context = React.createContext();
 
@@ -9,6 +10,11 @@ const reducer = (state, action) => {
         ...state,
         contacts: [action.payload, ...state.contacts]
       };
+    case 'UPDATE_CONTACT':
+      return {
+        ...state,
+        contacts: state.contacts.map( contact => contact.id === action.payload.id ? (contact = action.payload) : contact )
+      }
     default:
       return state;
   }
@@ -16,23 +22,15 @@ const reducer = (state, action) => {
 
 export class Provider extends Component {
   state = {
-    contacts: [
-      {
-        id: 1,
-        name:'Joey Tornado',
-        email: 'jtornado@deepspace.com',
-        phone: '555-555-5555'
-      },
-      {
-        id: 2,
-        name:'Alexander Cumulous',
-        email: 'acumulous@deepspace.com',
-        phone: '666-666-6666'
-      }
-    ],
+    contacts: [],
     dispatch: action => {
       this.setState(state => reducer(state, action))
     }
+  };
+
+  componentDidMount() {
+    axios.get('http://localhost:8000/api:astronaut/').then(res => this.setState({ contacts: res.data }));
+    console.log(this.state);
   }
 
   render() {

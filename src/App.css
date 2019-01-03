@@ -1,0 +1,9 @@
+.astronaut {
+}
+
+.astronaut canvas {
+  border-width: thick;
+  border-style: solid;
+  background-color: white;
+  display:inline-block;
+}

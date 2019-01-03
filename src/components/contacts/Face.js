@@ -77,12 +77,8 @@ class Face extends React.Component {
     const { squares, color } = this.state;
     let tint = '#' + color;
     return(
-      <div>
-        <div className='facebox' style={{ spacing:'0px', overflow:'hidden', padding:'5px', borderWidth:'4px', borderStyle:'solid', borderColor:tint, display:'inline-block', borderRadius:'10px 10px 0px 0px'  }}>
-
-            <canvas ref='face' width='60' height='60' />
-
-        </div>
+      <div style={{display:'inline-block'}}>
+        <canvas ref='face' width='60' height='60' style={{borderColor:tint}} />
       </div>
     )
   }
