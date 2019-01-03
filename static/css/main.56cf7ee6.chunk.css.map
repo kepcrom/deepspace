@@ -1,0 +1,1 @@
+{"version":3,"sources":["/Users/kevincromwell/Sites/react/deepspace/src/App.css"],"names":[],"mappings":"AAGA,kBACE,mBAAoB,AACpB,mBAAoB,AACpB,sBAAwB,AACxB,oBAAqB,CACtB","file":"main.56cf7ee6.chunk.css","sourcesContent":[".astronaut {\n}\n\n.astronaut canvas {\n  border-width: thick;\n  border-style: solid;\n  background-color: white;\n  display:inline-block;\n}\n"]}
