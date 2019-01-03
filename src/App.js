@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {HashRouter as Router, Route, Switch} from 'react-router-dom';
 import Contact from './components/contacts/Contact';
 import Contacts from './components/Contacts';
 import AddContact from './components/contacts/AddContact';
@@ -15,7 +15,7 @@ class App extends Component {
   render() {
     return(
       <Provider>
-        <Router basename={process.env.PUBLIC_URL}>
+        <Router>
           <div className='App'>
             <Header branding="Deep Space Communication"/>
             <Switch>
